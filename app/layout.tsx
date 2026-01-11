@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const lexend = localFont({
+  src:'/fonts/Lexend-Regular.ttf',
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const cunia = localFont({
+  src:'/fonts/Cunia.ttf',
+  variable: "--font-cunia"
 });
 
 export const metadata: Metadata = {
@@ -25,9 +26,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${lexend.className} 
+        ${cunia.variable} antialiased bg-slate-50`}
       >
+        <Header/>
+        <main className="min-h-svh">
         {children}
+        </main>
       </body>
     </html>
   );
