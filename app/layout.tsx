@@ -33,6 +33,7 @@ export default function RootLayout({
         <main className="min-h-svh">
         {children}
         </main>
+        <Footer />
       </body>
     </html>
   );
