@@ -40,7 +40,7 @@ export default  function ProductListSec() {
             </div>
 
             {/*Product list*/}
-            <div className="gird gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-14 sm:mb-28">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-14 sm:mb-28">
                 {allProducts.map((product) => (
                     <ProductCard key={product.id} {...product} />
                 ))}
