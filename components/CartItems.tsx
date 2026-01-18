@@ -5,14 +5,13 @@ import Link from 'next/link'
 import {useCartStore} from "@/store/cartStore";
 import {useMemo} from "react";
 import {allProducts} from "@/data/data";
-import {it} from "node:test";
 
 export default function CartItems() {
     const items = useCartStore((state)=>state.items);
     const removeItem = useCartStore((state)=>state.removeItem);
     const updateQuantity = useCartStore((state)=>state.updateQuantity);
     const clearCart = useCartStore((state)=>state.clearCart);
-
+//
     const cartItems = useMemo(() => {
         return items.map((item)=> {
             const product = allProducts.find((p) => p.id === item.id);
