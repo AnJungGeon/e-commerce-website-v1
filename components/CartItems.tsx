@@ -11,7 +11,7 @@ export default function CartItems() {
     const removeItem = useCartStore((state)=>state.removeItem);
     const updateQuantity = useCartStore((state)=>state.updateQuantity);
     const clearCart = useCartStore((state)=>state.clearCart);
-//
+
     const cartItems = useMemo(() => {
         return items.map((item)=> {
             const product = allProducts.find((p) => p.id === item.id);
@@ -26,14 +26,36 @@ export default function CartItems() {
 
             };
         })
-    }, [items])
-  return (
+    }, [items]);
+
+    //Total items
+        const totalItems = useMemo(() => {
+            return items.reduce((total, item) => total + item.quantity, 0);
+        }, [items]);
+
+
+    //subtotal
+    const subtotal = useMemo(()=>{
+        return cartItems.reduce((total, item) =>total+ item.price * item.quantity, 0);
+    },[totalItems]
+    );
+
+    //tax
+    const tax = subtotal * 0.1;
+
+    //shipping
+    const shipping = subtotal === 0 ? 0:subtotal >= 100 ? 0 : 100;
+
+    const total = subtotal + tax + shipping;
+
+    return (
   <section className='py-24 md:py-28'>
     <div className='container'>
         {/* Title */}
         <div className='mb-8 space-y-1.5'>
             <h3 className='text-3xl'>Shopping Cart</h3>
-            <p className='text-neutral-300'>(2) items in you cart</p>
+            <p className='text-neutral-300'>{totalItems} 
+                {totalItems === 1? "item" : "items"} in you cart</p>
         </div>
         <div className='grid gap-8 lg:grid-cols-3 lg:items-start'>
             {/* Cart Items */}
@@ -97,7 +119,8 @@ export default function CartItems() {
                     flex justify-between">
                                         <p className=''>Subtotal:</p>
                                         <p className='text-amber-600 font-cunia'>
-                                            ${300}
+                                            ${(item.price * item.quantity).toFixed
+                                            (2)}
                                         </p>
                                     </div>
                                 </div>
@@ -200,24 +223,24 @@ export default function CartItems() {
                     {/* Total */}
                     <div className='flex justify-between text-gray-600'>
                         <h4>Subtotal:</h4>
-                        <p >${500}</p>
+                        <p >${subtotal}</p>
                     </div>
                     {/* Shipping`` */}
                     <div className='flex justify-between text-gray-600'>
                         <h4>Shipping:</h4>
-                        <p className='text-amber-600'>{'free'}</p>
+                        <p className='text-amber-600'>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</p>
                     </div>
                     {/* Tax */}
                     <div className='flex justify-between text-gray-600'>
                         <h4>Tax:</h4>
-                        <p>${500}</p>
+                        <p>${tax}</p>
                     </div>
                 </div>
 
                 {/* Total price */}
                 <div className='border-t border-r-gray-200 pt-4 mb-6'>
                     <h4>Total</h4>
-                    <p>${500}</p>
+                    <p>${total}</p>
                 </div>
 
                 {/* Check out btn */}
