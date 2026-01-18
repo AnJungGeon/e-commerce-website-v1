@@ -4,11 +4,17 @@ import {RiArrowLeftLine, RiShoppingCart2Line, RiStarFill} from "@remixicon/react
 import Image from "next/image";
 import {productFeatures, allProducts} from "@/data/data";
 import {useParams} from "next/navigation";
+import {useCartStore} from "@/store/cartStore";
 
 export default function ProductDetails(){
     const params = useParams();
     const productId = parseInt(params.id as string);
     const product = allProducts.find(p => p.id === productId);
+    const addToCart = useCartStore((state)=>state.addItem);
+    const handleAddToCart = () =>{
+        if(!product) return
+        addToCart(product.id,1);
+    };
 
     if(!product){
         return (
@@ -50,7 +56,7 @@ export default function ProductDetails(){
                     <p className="text-gray-800">Product</p>
                 </div>
                 {/*Back btn*/}
-                <Link href={""} className="inline-flex items-center gap-2 text-amber-600
+                <Link href={"/shop"} className="inline-flex items-center gap-2 text-amber-600
                 hover:text-amber-700 mb-8 font-medium
                 focus:text-amber-700 transition-colors">
                     <RiArrowLeftLine />
@@ -87,7 +93,7 @@ export default function ProductDetails(){
                         <p>{product?.desc}</p>
                         {/*add to cart*/}
                         <button className="btn-primary flex items-center
-                        gap-1 ">
+                        gap-1 " onClick={handleAddToCart}>
                             <span className="shrink-0">
                                 <RiShoppingCart2Line/>
                             </span>

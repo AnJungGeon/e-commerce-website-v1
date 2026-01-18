@@ -2,14 +2,24 @@
 import Link from "next/link"
 import { navItems } from "@/data/data"
 import { RiShoppingCart2Line, RiMenuLine, RiCloseLine } from "@remixicon/react";
-import { useState } from "react";
+import {useMemo, useState} from "react";
 import { usePathname } from "next/navigation";
+import { useCartStore} from "@/store/cartStore";
 
 
 export default function Header() {
   const [openMenu, setOpenMenu] = useState<boolean>(false)
   const handleClick = () => setOpenMenu(!openMenu)
   const pathname = usePathname();
+  const items = useCartStore((state) => state.items);
+
+
+  //total items
+  const totalItems = useMemo(()=>{
+    return items.reduce((total, item) => total + item.quantity, 0);
+      },[items]
+  );
+
   return (
     <header className="sticky top-0 border-b border-gray-200 
     w-full py-3 bg-white z-50 font-cunia">
@@ -40,11 +50,13 @@ export default function Header() {
                 ""}`}>              
                 <RiShoppingCart2Line size={26}
                 className="hover:text-amber-600 focus:text-amber-600 transition-all" />
-              <span className="absolute top-0 right-0
+              {totalItems > 0 && (
+                  <span className="absolute top-0 right-0
               bg-amber-600 flex items-center size-5 rounded-full
-              text-white justify-center text-xs">2</span>
+              text-white justify-center text-xs">{totalItems}</span>)}
             </Link>
-            <button className="btn-primary">Log In</button>
+            {/*Log in btn*/}
+            <Link href={'/login'} className="btn-primary">Log In</Link>
           </div>
         </nav>
         {/*mobile menu*/}
@@ -60,11 +72,13 @@ export default function Header() {
                 ""}
                 `}
                   />
-              <span className=" size-5 bg-amber-600 text-white
+              {totalItems > 0 && (
+                  <span className=" size-5 bg-amber-600 text-white
               flex items-center justify-center rounded-full
               text-xs absolute top-0 right-0">
-                2
+                {totalItems}
               </span>
+              )}
             </Link>
             {/*Menu btn*/}
             <button onClick={handleClick}>
@@ -92,9 +106,9 @@ export default function Header() {
               ))}
             </ul>
             {/*Login btn */}
-            <button className="btn-primary w-full" 
+            <Link href={"/login"} className="btn-primary w-full text-center"
              onClick={handleClick}
-            >Log In</button>
+            >Log In</Link>
           </div>
         </nav>
       </div>

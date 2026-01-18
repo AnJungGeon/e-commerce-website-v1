@@ -1,8 +1,10 @@
-import React from 'react'
+"use client";
 import { ProductCardProps } from '@/types/types'
 import Image from 'next/image';
 import Link from 'next/link';
 import { RiEyeLine, RiShoppingCart2Line, RiStarFill } from '@remixicon/react';
+import {useCartStore} from "@/store/cartStore";
+import {useCallback} from "react";
 
 export default function ProductCard({
     id, 
@@ -12,6 +14,11 @@ export default function ProductCard({
     star
     }: ProductCardProps
 ) {
+    const addToCart = useCartStore((state)=>state.addItem);
+
+    const handleAddToCart = () =>{
+        addToCart(id,1);
+    };
   return (
   <div className='bg-white p-8 rounded-md flex flex-col
     relative group gap-2.5'>
@@ -19,14 +26,14 @@ export default function ProductCard({
     <div className='py-10 relative flex items-center 
     justify-center bg-amber-50 h-full rounded-xl'>
         <Image src={img} alt={name} width=
-        {200} height={200} className='' />
+        {200} height={200} className='w-auto h-auto object-contain' />
         {/* btn */}
-        <Link href={'/shop'} className='absolute top-0 right-0
+        <Link href={`/shop/${id}`} className='absolute top-0 right-0
         bg-white gap-0 border
         border-amber-200 p-2 rounded-xs opacity-0
         group-hover:opacity-100 
-        hover:text-amber-600 focus:text-amber-600 transition-all' 
-        title='View product details'>
+        hover:text-amber-600 focus:text-amber-600 transition-all'
+              title='View product details'>
             <RiEyeLine />
         </Link>
     </div>
@@ -34,7 +41,7 @@ export default function ProductCard({
     <div className='space-y-5 mt-auto'>
         {/* Add to cart btn */}
         <button className='btn-primary flex items-center
-        justify-center w-full'>
+        justify-center w-full' onClick={handleAddToCart}>
             <span>
                 <RiShoppingCart2Line size={22}/>
             </span>
